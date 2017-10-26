@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#verdej0 added a string return with the success, error or the data
 
 ##TODO: Improve the next two lines
 import sys
@@ -19,66 +20,83 @@ class BUABot:
         self.__bua = BUA()
         
     def login(self, user, secret):
+        text=''
         try:
             self.__bua.login(user, secret)
-            print 'Login sucessful'
+            text+= 'Login sucessful'
         except InvalidCredentialsException:
-            print 'InvalidCredentialsException'
+            text+= 'InvalidCredentialsException'
         except AlreadyLoggedUserException:
-            print 'AlreadyLoggedUserException'
+            text+= 'AlreadyLoggedUserException'
+        return text
 
     def disconnect(self):
+        text=''
         try:
             self.__bua.disconnect()
-            print 'Disconnect sucessful'
+            text= 'Disconnect sucessful'
         except UnloggedUserException:
-            print 'UnloggedUserException'
+            text= 'UnloggedUserException'
+        
+        return text
 
     def showLoans(self):
+        text=''
         try:
-            print self.__bua.showLoans()
+            text= self.__bua.showLoans()
         except UnloggedUserException:
-            print 'UnloggedUserException'
+            text= 'UnloggedUserException'
+        return text
 
     def searchBook(self, name):
+            text=''
             books = self.__bua.searchBook(name)
             if len(books)==0:
-                print 'No books found'
+                text = 'No books found'
             else:
-                print books
+
+                text = books
+            return text
 
     def localizationForBook(self, idBook):
+        text=''
         try:
             locations = self.__bua.localizationsForBook(idBook)
-            print locations
+            text = locations
         except NoSearchException:
-            print 'NoSearchException'
+            text= 'NoSearchException'
         except BookIndexOutbound:
-            print 'BookIndexOutbound'
+            text = 'BookIndexOutbound'
+        return text
 
     def nextPage(self):
+        text=''
         try:
             books = self.__bua.nextPage()
-            print books
+            text= books
         except NoSearchException:
-            print 'NoSearchException'
+            text= 'NoSearchException'
         except OnlyOnePageException:
-            print 'OnlyOnePageException'
+            text= 'OnlyOnePageException'
+        return text
 
     def lastPage(self):
+        text=''
         try:
             books = self.__bua.lastPage()
-            print books
+            text= books
         except NoSearchException:
-            print 'NoSearchException'
+            text= 'NoSearchException'
         except OnlyOnePageException:
-            print 'OnlyOnePageException'
+            text= 'OnlyOnePageException'
+
+        return text
 
     def loanAllBooks(self):
+        text=''
         try:
-            print self.__bua.loanAllBooks()
+            text= self.__bua.loanAllBooks()
         except UnloggedUserException:
-            print 'UnloggedUserException'
-
-
+            text= 'UnloggedUserException'
+        return text 
 
