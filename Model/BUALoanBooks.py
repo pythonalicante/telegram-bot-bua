@@ -15,4 +15,4 @@ class BUALoanBooks:
 
     def setBooks(self, dataBooks):
         for book in dataBooks:
-            self.books.append(LoanBook(book))
+            self.books.append(LoanBook.LoanBook(book))

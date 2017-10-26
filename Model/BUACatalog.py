@@ -19,4 +19,4 @@ class BUACatalog:
     def setBooks(self, dataBooks):
         self.books = []
         for book in dataBooks:
-            self.books.append(CatalogBook(book))
+            self.books.append(CatalogBook.CatalogBook(book))

@@ -17,20 +17,20 @@ class BUABot:
         text = ''
         try:
             self.__bua.login(user, secret)
-            text += 'Login sucessful'
+            text = 'Login sucessful'
         except InvalidCredentialsException:
-            text += 'InvalidCredentialsException'
+            text = 'InvalidCredentialsException'
         except AlreadyLoggedUserException:
-            text += 'AlreadyLoggedUserException'
+            text = 'AlreadyLoggedUserException'
         return text
 
     def disconnect(self):
         text = ''
         try:
             self.__bua.disconnect()
-            text += 'Disconnect sucessful'
+            text = 'Disconnect sucessful'
         except UnloggedUserException:
-            text += 'UnloggedUserException'
+            text = 'UnloggedUserException'
 
         return text
 
@@ -49,8 +49,7 @@ class BUABot:
         if len(books) == 0:
             text += 'No books found'
         else:
-
-            text += books
+            text += str(books)
         return text
 
     def localizationForBook(self, idBook):
@@ -68,29 +67,29 @@ class BUABot:
         text = ''
         try:
             books = self.__bua.nextPage()
-            text += books
+            text = books
         except NoSearchException:
-            text += 'NoSearchException'
+            text = 'NoSearchException'
         except OnlyOnePageException:
-            text += 'OnlyOnePageException'
+            text = 'OnlyOnePageException'
         return text
 
     def lastPage(self):
         text = ''
         try:
             books = self.__bua.lastPage()
-            text += books
+            text = books
         except NoSearchException:
-            text += 'NoSearchException'
+            text = 'NoSearchException'
         except OnlyOnePageException:
-            text += 'OnlyOnePageException'
+            text = 'OnlyOnePageException'
 
         return text
 
     def loanAllBooks(self):
         text = ''
         try:
-            text += self.__bua.loanAllBooks()
+            text = self.__bua.loanAllBooks()
         except UnloggedUserException:
-            text += 'UnloggedUserException'
+            text = 'UnloggedUserException'
         return text
