@@ -6,7 +6,7 @@ from Bot import BUABot
 bua = BUABot.BUABot()
 
 # bot's token
-TOKEN = ':-'
+TOKEN = '455219019:AAE9TkT5m-e8blAhzlkMN2Z2L5d_KCb9Lu0'
 
 #@verdej0
 # all the functions must return a string with success, error or the info

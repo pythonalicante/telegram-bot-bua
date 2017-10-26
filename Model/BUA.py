@@ -3,19 +3,19 @@
 
 # TODO: Improve the next two lines
 
-from BUACrawler import BUACrawler
-from BUALoanBooks import BUALoanBooks
-from BUACatalog import BUACatalog
-from LoginException import InvalidCredentialsException, UnloggedUserException, AlreadyLoggedUserException
-from CatalogException import NoSearchException, OnlyOnePageException, BookIndexOutbound
+from Crawler import BUACrawler
+from Model import BUALoanBooks
+from Model import BUACatalog
+from Model.Exceptions.CatalogException import NoSearchException, OnlyOnePageException, BookIndexOutbound
+from Model.Exceptions.LoginException import InvalidCredentialsException, UnloggedUserException, AlreadyLoggedUserException
 
 
 class BUA:
 
     def __init__(self):
-        self.__crawler = BUACrawler()
-        self.__catalog = BUACatalog()
-        self.__loansBooks = BUALoanBooks()
+        self.__crawler = BUACrawler.BUACrawler()
+        self.__catalog = BUACatalog.BUACatalog()
+        self.__loansBooks = BUALoanBooks.BUALoanBooks()
         self.__userId = ''
 
         self.__isOnCatalog = False

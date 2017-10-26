@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from CatalogBook import CatalogBook
+from Model import CatalogBook
 
 
 class BUACatalog:

@@ -3,7 +3,7 @@
 
 import requests
 import re
-import Utils
+from Common import Utils
 from bs4 import BeautifulSoup as bs
 
 header = {'content-type': 'application/x-www-form-urlencoded'}

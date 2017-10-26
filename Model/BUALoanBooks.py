@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from LoanBook import LoanBook
+from Model import LoanBook
 
 
 class BUALoanBooks:

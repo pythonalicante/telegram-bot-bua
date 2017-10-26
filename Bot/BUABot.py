@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 
-from BUA import BUA
-from LoginException import InvalidCredentialsException, UnloggedUserException, AlreadyLoggedUserException
-from CatalogException import NoSearchException, OnlyOnePageException, BookIndexOutbound
+from Model import BUA
+from Model.Exceptions.CatalogException import NoSearchException, OnlyOnePageException, BookIndexOutbound
+from Model.Exceptions.LoginException import InvalidCredentialsException, UnloggedUserException, AlreadyLoggedUserException
 
 
 # TODO: Add timeout for disconnect, for example, 15min...
 class BUABot:
 
     def __init__(self):
-        self.__bua = BUA()
+        self.__bua = BUA.BUA()
 
     def login(self, user, secret):
         text = ''
