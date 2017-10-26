@@ -3,11 +3,10 @@
 
 import telegram.ext
 from Bot import BUABot
-
-#buabot=BUABot()
+bua=BUABot.BUABot()
 
 #bot's token
-TOKEN=''
+TOKEN=':-'
 
 #@verdej0
 #all the functions must return a string with success, error or the info
@@ -15,14 +14,15 @@ TOKEN=''
 def login(bot,update,args):
     text=''
     if(len(args) == 2):
-        text=BUABot().login(args[0],args[1])
+        text+=bua.login(args[0],args[1])
         update.message.reply_text(text)
     else:
         update.message.reply_text("Error en los parametros.\nUso /login user password")
 
 
 def disconnect(bot,update):
-    text=BUABot().disconnect()
+    text=''
+    text=bua.disconnect()
     update.message.reply_text(text)
 
 #Search books, and search for a book location
@@ -31,17 +31,17 @@ def catalog(bot,update,args):
     USAGE='Error en los argumentos.\n Uso:\n /catalog search bookname\n /catalog nextPage\n/catalog lastPage\n/catalog location bookid'
     if(len(args) == 1):
         if(str.lower(args[0])=='nextpage'):
-            text=BUABot().nextPage()
+            text=bua.nextPage()
         elif(str.lower(args[0])=='lastpage'):
-            text=BUABot().lastPage()
+            text=bua.lastPage()
         else:
             text=USAGE
             
     elif(len(args) == 2):
         if(str.lower(args[0])=='search'):
-            text=BUABot().searchBook(args[1])
+            text=bua.searchBook(args[1])
         elif(str.lower(args[0])=='location'):
-            text=BUABot().localizationForBook(args[1])
+            text=bua.localizationForBook(args[1])
         else:
             text=USAGE
     else:
@@ -52,12 +52,14 @@ def catalog(bot,update,args):
             
 #View the loans
 def myBooks(bot,update):
-    text=BUABot().showLoans()
+    text=''
+    text=bua.showLoans()
     update.message.reply_text(text)
 
 #Renew all the loans
 def loanBooks(bot,update):
-    text=BUABot().loanAllBooks()
+    text=''
+    text=bua.loanAllBooks()
     update.message.reply_text(text)
 
 def help(bot,update):
@@ -71,14 +73,15 @@ def start(bot,update):
 
 
 def main():
+    
     updater = telegram.ext.Updater(TOKEN)
     dp = updater.dispatcher
 
     dp.add_handler(telegram.ext.CommandHandler("login",login,pass_args=True))
     dp.add_handler(telegram.ext.CommandHandler("logout",disconnect))
     dp.add_handler(telegram.ext.CommandHandler("catalog",catalog,pass_args=True))
-    dp.add_handler(telegram.ext.CommandHandler("myBooks",myBooks))
-    dp.add_handler(telegram.ext.CommandHandler("loanBooks",loanBooks))
+    dp.add_handler(telegram.ext.CommandHandler("mybooks",myBooks))
+    dp.add_handler(telegram.ext.CommandHandler("loanbooks",loanBooks))
     dp.add_handler(telegram.ext.CommandHandler("help",help))
     dp.add_handler(telegram.ext.CommandHandler("start",start))
 
