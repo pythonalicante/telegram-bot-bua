@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import telegram.ext
+import os
 from Bot import BUABot
 bua = BUABot.BUABot()
 
 # bot's token
-TOKEN = '455219019:AAE9TkT5m-e8blAhzlkMN2Z2L5d_KCb9Lu0'
+TOKEN = os.getenv('TOKEN')
 
 #@verdej0
 # all the functions must return a string with success, error or the info
