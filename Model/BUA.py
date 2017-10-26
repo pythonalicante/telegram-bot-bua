@@ -1,11 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-##TODO: Improve the next two lines
-
-import sys
-sys.path.append('Crawler/')
-sys.path.append('Model/Exceptions/')
+# TODO: Improve the next two lines
 
 from BUACrawler import BUACrawler
 from BUALoanBooks import BUALoanBooks
@@ -39,11 +35,10 @@ class BUA:
         if not self.__isLogged:
             raise UnloggedUserException()
 
-        self.__crawler.disconnect()    
+        self.__crawler.disconnect()
         self.__isLogged = True
         self.__isOnCatalog = False
         self.__isRenovatingBooks = False
-    
 
     def showLoans(self):
         self.__isOnCatalog = False
@@ -82,38 +77,40 @@ class BUA:
     def localizationsForBook(self, idBook):
         if not self.__isOnCatalog:
             raise NoSearchException()
-        
-        if idBook<0 or idBook>=len(self.__catalog.books):
+
+        if idBook < 0 or idBook >= len(self.__catalog.books):
             raise BookIndexOutbound()
 
         viewId = self.__catalog.books[idBook].viewAction
-        locations = self.__crawler.localizationsForBook(viewId, self.__catalog.page)
+        locations = self.__crawler.localizationsForBook(
+            viewId, self.__catalog.page)
         self.stepBackward()
         return locations
 
     def nextPage(self):
         if not self.__isOnCatalog:
             raise NoSearchException()
-        
-        if self.__catalog.numPages==1:
+
+        if self.__catalog.numPages == 1:
             raise OnlyOnePageException()
 
         if self.__catalog.page < self.__catalog.numPages:
             self.__catalog.page += 1
-            self.__catalog.setBooks(self.__crawler.nextPageOf__catalog(self.__catalog.pageIndexs))
+            self.__catalog.setBooks(
+                self.__crawler.nextPageOf__catalog(self.__catalog.pageIndexs))
 
         return self.__catalog.books
-        
 
     def lastPage(self):
 
         if not self.__isOnCatalog:
             raise NoSearchException()
 
-        if self.__catalog.numPages==1:
+        if self.__catalog.numPages == 1:
             raise OnlyOnePageException()
-        
+
         if self.__catalog.page > 1:
             self.__catalog.page -= 1
-            self.__catalog.setBooks(self.__crawler.nextPageOf__catalog(self.__catalog.pageIndexs))
+            self.__catalog.setBooks(
+                self.__crawler.nextPageOf__catalog(self.__catalog.pageIndexs))
         return self.__catalog.books

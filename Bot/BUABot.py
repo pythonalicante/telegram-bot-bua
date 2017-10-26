@@ -2,102 +2,95 @@
 # -*- coding: utf-8 -*-
 
 
-##TODO: Improve the next two lines
-import sys
-sys.path.append("Model/")
-
-
 from BUA import BUA
 from LoginException import InvalidCredentialsException, UnloggedUserException, AlreadyLoggedUserException
 from CatalogException import NoSearchException, OnlyOnePageException, BookIndexOutbound
 
 
-##TODO: Add timeout for disconnect, for example, 15min...
+# TODO: Add timeout for disconnect, for example, 15min...
 class BUABot:
 
     def __init__(self):
         self.__bua = BUA()
-        
+
     def login(self, user, secret):
-        text=''
+        text = ''
         try:
             self.__bua.login(user, secret)
-            text+= 'Login sucessful'
+            text += 'Login sucessful'
         except InvalidCredentialsException:
-            text+= 'InvalidCredentialsException'
+            text += 'InvalidCredentialsException'
         except AlreadyLoggedUserException:
-            text+= 'AlreadyLoggedUserException'
+            text += 'AlreadyLoggedUserException'
         return text
 
     def disconnect(self):
-        text=''
+        text = ''
         try:
             self.__bua.disconnect()
-            text+= 'Disconnect sucessful'
+            text += 'Disconnect sucessful'
         except UnloggedUserException:
-            text+= 'UnloggedUserException'
-        
+            text += 'UnloggedUserException'
+
         return text
 
     def showLoans(self):
-        text=''
+        text = ''
         try:
-            text+= self.__bua.showLoans()
+            text += self.__bua.showLoans()
         except UnloggedUserException:
-            text+= 'UnloggedUserException'
-        
+            text += 'UnloggedUserException'
+
         return text
 
     def searchBook(self, name):
-            text=''
-            books = self.__bua.searchBook(name)
-            if len(books)==0:
-                text+= 'No books found'
-            else:
+        text = ''
+        books = self.__bua.searchBook(name)
+        if len(books) == 0:
+            text += 'No books found'
+        else:
 
-                text+= books
-            return text
+            text += books
+        return text
 
     def localizationForBook(self, idBook):
-        text=''
+        text = ''
         try:
             locations = self.__bua.localizationsForBook(idBook)
-            text+= locations
+            text += locations
         except NoSearchException:
-            text+= 'NoSearchException'
+            text += 'NoSearchException'
         except BookIndexOutbound:
-            text+= 'BookIndexOutbound'
+            text += 'BookIndexOutbound'
         return text
 
     def nextPage(self):
-        text=''
+        text = ''
         try:
             books = self.__bua.nextPage()
-            text+= books
+            text += books
         except NoSearchException:
-            text+= 'NoSearchException'
+            text += 'NoSearchException'
         except OnlyOnePageException:
-            text+= 'OnlyOnePageException'
+            text += 'OnlyOnePageException'
         return text
 
     def lastPage(self):
-        text=''
+        text = ''
         try:
             books = self.__bua.lastPage()
-            text+= books
+            text += books
         except NoSearchException:
-            text+= 'NoSearchException'
+            text += 'NoSearchException'
         except OnlyOnePageException:
-            text+= 'OnlyOnePageException'
+            text += 'OnlyOnePageException'
 
         return text
 
     def loanAllBooks(self):
-        text=''
+        text = ''
         try:
-            text+= self.__bua.loanAllBooks()
+            text += self.__bua.loanAllBooks()
         except UnloggedUserException:
-            text+= 'UnloggedUserException'
-        return text 
-
-
+            text += 'UnloggedUserException'
+        return text

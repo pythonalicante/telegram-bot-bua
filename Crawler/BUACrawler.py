@@ -1,11 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-##TODO: Improve the next two lines
-
-import sys
-sys.path.append('Common/')
-
 import requests
 import re
 import Utils
@@ -56,32 +51,33 @@ class BUACrawler:
     def __extractBooksOfCurrentPage(self):
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
         setOfTables = self.__urlScrapped.find_all('td', {'class': 'searchsum'})
-        
+
         books = []
 
-        if len(setOfTables)==0:
+        if len(setOfTables) == 0:
             return books
 
         items = setOfTables[0].find_all('table')
-        
-        for i in range(1, len(items)-1):
+
+        for i in range(1, len(items) - 1):
             label = items[i].find_all('td')[4].find_all('label')
             matches = re.finditer(Utils.catalogBookRegex, str(label))
             for match in matches:
-                books.append(match.groups())   
+                books.append(match.groups())
 
         return books
 
     def stepBackward(self):
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
         tables = self.__urlScrapped.find('table', {'class', 'gatewaystyle'})
-        action = tables.find('tr').find('td').find_all('a')[0].attrs.get('href')
+        action = tables.find('tr').find('td').find_all('a')[
+            0].attrs.get('href')
         self.__currentUrl = urlBase + action
         self.__currentPage = requests.get(self.__currentUrl).content
 
     def searchBook(self, bookName):
 
-        ## Go to catalog menu section
+        # Go to catalog menu section
         books = []
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
         setOfTd = self.__urlScrapped.find_all('td', {'class': 'rootbarcell'})
@@ -105,39 +101,40 @@ class BUACrawler:
             'srchfield1': 'GENERAL^SUBJECT^GENERAL^^Todos los campos',
             'library': '',
             'sort_by': 'TI',
-            }
-        response = requests.post(self.__currentUrl, data=payload, headers=header)
+        }
+        response = requests.post(
+            self.__currentUrl, data=payload, headers=header)
         self.__currentPage = response.content
         pagesIndex = self.__catalogLastPageIndex()
         books = self.__extractBooksOfCurrentPage()
         numPages = 1
         if len(pagesIndex) == 2:
-            numPages = pagesIndex[1]/20 + 1
+            numPages = pagesIndex[1] / 20 + 1
         return [books, numPages, pagesIndex]
 
     def localizationsForBook(self, viewName, currentPage):
-        
+
         locations = []
-        last_hit =  currentPage * 20
+        last_hit = currentPage * 20
         first_hit = last_hit - 19
 
         action = self.__getActionOfForm(nameHitlistForm)
         self.__currentUrl = urlBase + action
         payload = {'first_hit': first_hit,
-                    'last_hit': last_hit,
-                    'form_type': '',
-                    viewName: 'Detalles'}
+                   'last_hit': last_hit,
+                   'form_type': '',
+                   viewName: 'Detalles'}
 
-        response = requests.post(self.__currentUrl, data=payload, headers=header)
+        response = requests.post(
+            self.__currentUrl, data=payload, headers=header)
         self.__currentPage = response.content
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
-        
-        panel1 = self.__urlScrapped.find('div', {'id':'panel1'})
+
+        panel1 = self.__urlScrapped.find('div', {'id': 'panel1'})
 
         tables = panel1.find_all('table')
         if len(tables) < 2:
             return locations
-
 
         trSet = tables[1].find_all('tr')
         if len(tables) == 0:
@@ -148,25 +145,25 @@ class BUACrawler:
 
             signature = ''
             location = ''
-            if len(tdSet)>1:
+            if len(tdSet) > 1:
                 signature = tdSet[0].next.lstrip()
-            if len(tdSet)==4:
+            if len(tdSet) == 4:
                 location = tdSet[3].next.lstrip()
 
-            if signature == '' and len(locations)>0:
-                signature = locations[len(locations)-1][0]
+            if signature == '' and len(locations) > 0:
+                signature = locations[len(locations) - 1][0]
             locations.append([signature, location])
-            
+
         return locations
 
     def nextPageOfCatalog(self, indexPagination):
         action = self.__getActionOfForm(nameHitlistForm)
         self.__currentUrl = urlBase + action
         payload = {'first_hit': indexPagination[0],
-                    'last_hit': indexPagination[1],
-                    'form_type': 'SCROLL^F'}
+                   'last_hit': indexPagination[1],
+                   'form_type': 'SCROLL^F'}
         response = requests.post(self.__currentUrl, data=payload,
-                headers=header)
+                                 headers=header)
         self.__currentPage = response.content
         return self.__extractBooksOfCurrentPage()
 
@@ -174,10 +171,10 @@ class BUACrawler:
         action = self.__getActionOfForm(nameHitlistForm)
         self.__currentUrl = urlBase + action
         payload = {'first_hit': indexPagination[0],
-                    'last_hit': indexPagination[1],
-                    'form_type': 'SCROLL^B'}
+                   'last_hit': indexPagination[1],
+                   'form_type': 'SCROLL^B'}
         response = requests.post(self.__currentUrl, data=payload,
-                headers=header)
+                                 headers=header)
         self.__currentPage = response.content
         return self.__extractBooksOfCurrentPage()
 
@@ -202,7 +199,7 @@ class BUACrawler:
         # This enters in link 'Renovar Prestamos'
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
         tables = self.__urlScrapped.find_all('table',
-                {'class': 'defaultstyle'})
+                                             {'class': 'defaultstyle'})
         action = tables[0].find_all('a')[-1].attrs.get('href')
 
         if action == '':
@@ -213,21 +210,22 @@ class BUACrawler:
         matches = re.finditer(Utils.loanBooksRegex, self.__currentPage)
         for match in matches:
             books.append(match.groups())
-        
+
         return books
 
     def loanAllBooks(self, userId):
         action = self.__getActionOfForm(nameRenewBooksForm)
         self.__currentUrl = urlBase + action
         payload = {'user_id': userId, 'selection_type': 'all'}
-        self.__currentPage = requests.post(self.__currentUrl, data=payload, headers=header).content
-        
+        self.__currentPage = requests.post(
+            self.__currentUrl, data=payload, headers=header).content
 
     def login(self, user, secret):
         action = self.__getActionOfForm(nameNewSessionForm)
         self.__currentUrl = urlBase + action
         payload = {'user_id': user, 'password': secret}
-        response = requests.post(self.__currentUrl, data=payload, headers=header)
+        response = requests.post(
+            self.__currentUrl, data=payload, headers=header)
         self.__currentPage = response.content
 
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
@@ -237,7 +235,8 @@ class BUACrawler:
 
     def disconnect(self):
         self.__urlScrapped = bs(self.__currentPage, 'html.parser')
-        tables = self.__urlScrapped.find_all('table', {'class': 'gatewaystyle'})
+        tables = self.__urlScrapped.find_all(
+            'table', {'class': 'gatewaystyle'})
         action = tables[0].find_all('a')[-1].attrs.get('href')
         self.__currentUrl = urlBase + action
         self.__currentPage = requests.post(self.__currentUrl).content
